@@ -6,7 +6,8 @@
 
 ## Usage
 
-
+Run app.js to get server running
+URL: http://localhost:3000
 
 ## Developing
 
