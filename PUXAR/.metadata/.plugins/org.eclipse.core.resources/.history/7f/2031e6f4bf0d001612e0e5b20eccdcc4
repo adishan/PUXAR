@@ -2,18 +2,12 @@
 /*
  * GET home page.
  */
-var mysql=require('mysql'),
-    path=require('path');
-
-
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
 };
 
-module.exports=function(app){	
-	
 app.get('/',function(req,res){
-	res.sendfile(path.normalize(__dirname+'/../views/index.html')); 
+	res.sendfile(__dirname + "/views/index.html"); 
 });
 
 
@@ -49,4 +43,3 @@ conn.query(query,function(err,rows){
 	res.send(rows);
 });
 });
-}

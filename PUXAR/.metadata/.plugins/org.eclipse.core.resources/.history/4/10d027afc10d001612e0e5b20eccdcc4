@@ -13,6 +13,7 @@ var express = require('express')
 
 
 var app = express();
+routes(app);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -24,7 +25,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
-routes(app);
+app.use('/',index);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

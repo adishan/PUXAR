@@ -2,18 +2,15 @@
 /*
  * GET home page.
  */
-var mysql=require('mysql'),
-    path=require('path');
-
+var mysql=require('mysql');
 
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
 };
 
 module.exports=function(app){	
-	
 app.get('/',function(req,res){
-	res.sendfile(path.normalize(__dirname+'/../views/index.html')); 
+	res.sendfile('F:/Project Files/PUXAR/Puxar/views/index.html'); 
 });
 
 

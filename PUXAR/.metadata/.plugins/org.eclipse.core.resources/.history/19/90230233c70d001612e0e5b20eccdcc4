@@ -13,7 +13,7 @@ exports.index = function(req, res){
 module.exports=function(app){	
 	
 app.get('/',function(req,res){
-	res.sendfile(path.normalize(__dirname+'/../views/index.html')); 
+	res.sendfile(path.resolve(__dirname,'','/views/index.html')); 
 });
 
 

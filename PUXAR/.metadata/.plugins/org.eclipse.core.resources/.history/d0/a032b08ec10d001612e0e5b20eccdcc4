@@ -6,7 +6,7 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
-  , routes =require('./routes/index')
+  , index =require('./routes/index')
   , http = require('http')
   , path = require('path')
   , mysql=require('mysql');
@@ -24,7 +24,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
-routes(app);
+app.use('/',index);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

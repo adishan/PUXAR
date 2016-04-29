@@ -28,6 +28,7 @@ app.get('/',function(req,res){
 		res.sendfile(__dirname + "/views/index.html"); 
 	});
 
+
 var conn=mysql.createConnection({
 		  host     : '127.0.0.1',
 		  user     : 'root',
@@ -43,30 +44,24 @@ conn.connect(function(err){
 
 app.post('/',function(req,res){
 	
-	var query='select PNAME from products';
+	var query='select * from products';
     
+	product=req.body.product;
+	
+	if(product!=null && product!="" && product!="undefined")
+		query+=' where PNAME="'+product+'"';
+	
+	console.log(query);
+	
 	conn.query(query,function(err,rows){
 		if (err){throw err;}
 		
-		console.log(rows);
+		console.log(rows)
 		res.contentType('json');
 		res.send(rows);
 	});
 });
 
-app.post('/product',function(req,res){
-	
-	var item=req.query.searchtext;
-	
-	var query="select * from products where PNAME='"+item+"';";
-	
-	conn.query(query,function(err,rows){
-		if (err){return err;}
-		
-		res.contentType('json');
-		res.send(rows);
-	});
-})
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

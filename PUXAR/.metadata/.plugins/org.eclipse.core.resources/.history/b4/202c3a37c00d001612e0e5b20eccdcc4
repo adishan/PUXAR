@@ -2,18 +2,14 @@
 /*
  * GET home page.
  */
-var mysql=require('mysql'),
-    path=require('path');
-
+module.exports=index;
 
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
 };
 
-module.exports=function(app){	
-	
-app.get('/',function(req,res){
-	res.sendfile(path.normalize(__dirname+'/../views/index.html')); 
+index.get('/',function(req,res){
+	res.sendfile(__dirname + "/views/index.html"); 
 });
 
 
@@ -30,7 +26,7 @@ if(err){throw err;}
 console.log("Connected!");
 });
 
-app.post('/',function(req,res){
+index.post('/',function(req,res){
 
 var query='select * from products';
 
@@ -49,4 +45,3 @@ conn.query(query,function(err,rows){
 	res.send(rows);
 });
 });
-}
