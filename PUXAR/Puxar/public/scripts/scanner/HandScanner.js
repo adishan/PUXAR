@@ -1,8 +1,8 @@
-$(function() {
+function scan_this(){
 var ip = window.location.href;
 
 var flag_click = '';
-$('#scan').hide();
+
 // Check if all characters are numeric
 function isNumeric( obj ) {
 		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
@@ -11,6 +11,7 @@ function isNumeric( obj ) {
 		// adding 1 corrects loss of precision from parseFloat (#15100)
 		return !jQuery.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
 	}
+
 	
 // Initialize the scanner
 	Quagga.init({
@@ -70,6 +71,8 @@ function isNumeric( obj ) {
 			$('div#interactive').hide();
 			$('div#codebox').hide();
 			
+			$('#scaniframe').remove();
+			
 			code='{"code": "'+code+'"}';
 			code=JSON.parse(code);
            
@@ -81,7 +84,7 @@ function isNumeric( obj ) {
 				jsonpCallback: 'callback',
 		        timeout:2000,
 		        success:function(data){
-		        	alert(data[0].PNAME+" "+data[0].PCODE);
+		        	showproduct(data);
 		        }
 			});
 			
@@ -90,4 +93,5 @@ function isNumeric( obj ) {
    })
 
 
-});
+}
+

@@ -4112,7 +4112,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            Quagga.onProcessed(onProcessed);
 	        } else if (e.data.cmd === 'process') {
 	            imageWrapper.data = new Uint8Array(e.data.imageData);
-	            Quagga.start();
+	            //Quagga.start();
 	        } else if (e.data.cmd === 'setReaders') {
 	            Quagga.setReaders(e.data.readers);
 	        }

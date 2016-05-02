@@ -76,3 +76,10 @@ function removeitem(name,price){
 	total-=price;
 	$('#checkout_total').html(total+".00");
 }
+
+function scanproduct(){
+	$('#map_Content').html("");
+	$('.main-content').append('<div id="container"><div id="interactive" class="viewport"></div></div>');
+	scan_this();
+}
+
