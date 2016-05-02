@@ -1,0 +1,101 @@
+$(function() {
+var ip = window.location.href;
+
+var flag_click = '';
+$('#scan').hide();
+// Check if all characters are numeric
+function isNumeric( obj ) {
+		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
+		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
+		// subtraction forces infinities to NaN
+		// adding 1 corrects loss of precision from parseFloat (#15100)
+		return !jQuery.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
+	}
+	
+// Initialize the scanner
+	Quagga.init({
+		inputStream : {
+		  name : "Live",
+		  type : "LiveStream",
+		  target: document.querySelector('#yourElement')    // Or '#yourElement' (optional)
+		},
+		decoder : {
+		  readers : ["code_128_reader"]
+		},
+		 multiple: false
+	  }, function(err) {
+		  if (err) {
+			  console.log(err);
+			  return;
+		  }
+		  console.log("Initialization finished. Ready to start");
+		  Quagga.start();
+	  });
+	  
+// On being processed 
+
+    Quagga.onProcessed(function(result) {
+        var drawingCtx = Quagga.canvas.ctx.overlay,
+            drawingCanvas = Quagga.canvas.dom.overlay;
+		$('#code').html("Searching"); 
+        if (result) {
+            if (result.boxes) {
+                drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+                result.boxes.filter(function (box) {
+                    return box !== result.box;
+                }).forEach(function (box) {
+                    Quagga.ImageDebug.drawPath(box, {x: 0, y: 1}, drawingCtx, {color: "green", lineWidth: 2});
+                });
+            }
+
+            if (result.box) {
+                Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, drawingCtx, {color: "#00F", lineWidth: 2});
+            }
+
+            if (result.codeResult && result.codeResult.code) {
+                Quagga.ImageDebug.drawPath(result.line, {x: 'x', y: 'y'}, drawingCtx, {color: 'red', lineWidth: 3});
+            }
+        }
+    });
+	
+//Output the detected code
+   Quagga.onDetected(function(result) {
+	        var code = result.codeResult.code;
+			var drawingCtx = Quagga.canvas.ctx.overlay,
+				drawingCanvas = Quagga.canvas.dom.overlay;	
+			//alert(code);
+
+			$('#code').html("Success"); 
+			$('#code').toggleClass("codeboxfound");
+			$('div#interactive').hide();
+			$('div#codebox').hide();
+			
+			code='{"code": "'+code+'"}';
+			code=JSON.parse(code);
+           
+			
+			$.ajax({ 
+				type: 'POST', 
+				url: '/scanner',
+				data:code,
+				jsonpCallback: 'callback',
+		        timeout:2000,
+		        success:function(data){
+		        	alert(data[0].PNAME+" "+data[0].PCODE);
+		        	$('div#interactive').hide();
+					$('div#codebox').hide();
+		        }
+			});
+			
+			$('#container').hide();
+			Quagga.pause();	
+			setTimeout(function(){
+			result = null;
+			drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+			Quagga.start();			
+			$('#code').toggleClass("codeboxfound");			
+				},3000);
+   })
+
+
+});
